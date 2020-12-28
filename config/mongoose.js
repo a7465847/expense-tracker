@@ -8,7 +8,7 @@ db.on('error', () => {
 })
 
 db.once('open', () => {
-  console.log('mongodb open')
+  console.log('my mongodb conneted')
 })
 
 module.exports = db

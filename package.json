@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js" ,
+    "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard && node my-tests.js",
+    "seed": "node models/seeds/categorySeeder.js && node models/seeds/recordSeeder.js"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +18,8 @@
     "express-handlebars": "^5.2.0",
     "method-override": "^3.0.0",
     "mongoose": "^5.11.8"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3"
   }
 }

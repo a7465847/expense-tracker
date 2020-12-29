@@ -3,6 +3,8 @@ const exphbs = require('express-handlebars')
 const bodyparser = require('body-parser')
 const methodOverride = require('method-override')
 
+const Record = require('./models/record ')
+
 require('./config/mongoose')
 
 const app = express()
@@ -15,9 +17,15 @@ app.use(methodOverride('_method'))
 app.use(bodyparser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-	res.send('MY web app')
+  let totalAmount = 0
+  Record.find()
+    .lean()
+    .then(records => {
+      records.forEach(record => { totalAmount += record.amount })
+      res.render('index', { records, totalAmount })
+    })
 })
 
 app.listen(port, () => {
-	console.log(`Express is running on http://localhost:${port}`)
+  console.log(`Express is running on http://localhost:${port}`)
 })

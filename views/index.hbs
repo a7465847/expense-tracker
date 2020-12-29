@@ -1,0 +1,86 @@
+<div class="row mt-5">
+  <div class="col-md-4 m-auto">
+    <div class="card card-body rounded-lg shadow  bd-highlight">
+      {{!-- 總金額 --}}
+      <ul class="list-group list-group-flush " id="record-list">
+        <li class="list-group-item list-group-item-action row d-flex bg-info align-self-center">
+          <big>總金額</big>
+          <h1 class="col-md-10 text-center"> {{totalAmount}} </h1>
+          <h4 class="fas fa-dollar-sign align-self-center">
+            </h5>
+        </li>
+      </ul>
+      <ul class="list-group list-group-flush" id="record-list">
+        {{!-- LIST --}}
+        {{#each records}}
+        <li class="list-group-item list-group-item-action d-flex p-1">
+          {{!-- 類別紀錄 --}}
+          <a class="col-md-8 d-flex justify-content-between align-items-center text-secondary btn" data-toggle="modal"
+            data-target="#dayaliModal-{{this._id}}" >
+            <div class="desc d-flex justify-content-between">
+              <h2 class="category mr-3 text-secondary"> {{{ this.icon }}} </h2>
+              <div class="detail">
+                <h4 class="name mb-0"> {{this.name}} </h4>
+                <i class="ate text-muted"> {{this.date}} </i>
+              </div>
+            </div>
+            <big class="amount"> {{this.amount}} </big>
+          </a>
+          {{!-- 編輯刪除 --}}
+          <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <a class="mr-2" href="/records/{{this._id}}/edit"><i class="far fa-edit"></i></a>
+            <button type="button" style="border: none; background: transparent;" class="far fa-trash-alt text-danger"
+              data-toggle="modal" data-target="#deleteModal-{{this._id}}">
+            </button>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- 刪除Modal -->
+{{#each records}}
+<div class="modal fade" id="deleteModal-{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content d-flex flex-wrap">
+      <div class="modal-header d-flex flex-wrap justify-content-center">
+        <img class="card-img-top" src="{{this.image}}" style="max-width: 400px; max-height: 500px;">
+        <h5 class="modal-title" style="margin: 0 auto">即將刪除 <strong> {{this.name}} </strong> </h5>
+      </div>
+      <div class="modal-footer bg-info">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <form action="/restaurants/{{this._id}}?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">確認刪除</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
+
+<!-- 記帳日記Modal -->
+{{#each records}}
+<div class="modal fade" id="dayaliModal-{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="dayaliModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content d-flex flex-wrap">
+      <div class="modal-header d-flex flex-wrap justify-content-center">
+        <img class="card-img-top" src="{{this.image}}" style="max-width: 400px; max-height: 500px;">
+      </div>
+      <div class="m-3">
+        <h4 class="text-muted">{{this.category}} - {{this.name}}</h4>
+        <i>{{this.date}}</i>
+        <p class="mb-5"> {{this.description}} </p>
+      </div>
+      <div class="modal-footer bg-info">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">離開</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}

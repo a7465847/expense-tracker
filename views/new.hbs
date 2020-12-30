@@ -1,7 +1,6 @@
- <form action="/" method="POST" class="mt-5">
+<form action="/records" method="POST" class="was-validated mt-5">
   <div class="row">
     <div class="card card-body rounded-lg shadow  bd-highlight col-md-4 m-auto">
-
       <h5><i class="fas fa-plus-square mr-1"></i>新增支出 </h5>
       <hr>
 
@@ -10,7 +9,7 @@
           消費日期
         </label>
         <div class="col-md-8">
-          <input type="date" name="date" class="form-control is-invalid" id="record-date" placeholder="年/月/日" required>
+          <input type="date" name="date" class="form-control is-valid" id="record-date" placeholder="年/月/日" required>
         </div>
       </div>
       <hr>
@@ -20,18 +19,18 @@
           消費名稱
         </label>
         <div class="col-md-8">
-          <input type="text" name="name" class="form-control is-invalid" id="record-name" required>
+          <input type="text" name="name" class="form-control is-valid" id="record-name" required>
         </div>
       </div>
       <hr>
 
       <div class="row form-group col-md-12">
-        <label for="record-category" class="col-md-4 col-form-label">
+        <label for="record-category" class="col-md-4 col-form-label" required>
           消費類別
         </label>
         <div class="col-md-8">
-          <select name="category" id="record-category" class="custom-select" required>
-            <option value="">請選擇⋯⋯</option>
+          <select name="category" id="record-category" class="custom-select">
+            <option>請選擇消費類型</option>
             {{#each categories}}
             <option value="{{this.title}}">{{this.title}}</option>
             {{/each}}

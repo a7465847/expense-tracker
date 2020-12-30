@@ -1,0 +1,63 @@
+ <form action="/" method="POST" class="mt-5">
+  <div class="row">
+    <div class="card card-body rounded-lg shadow  bd-highlight col-md-4 m-auto">
+
+      <h5><i class="fas fa-plus-square mr-1"></i>新增支出 </h5>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-date" class="col-md-4 col-form-label">
+          消費日期
+        </label>
+        <div class="col-md-8">
+          <input type="date" name="date" class="form-control is-invalid" id="record-date" placeholder="年/月/日" required>
+        </div>
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-name" class="col-md-4 col-form-label">
+          消費名稱
+        </label>
+        <div class="col-md-8">
+          <input type="text" name="name" class="form-control is-invalid" id="record-name" required>
+        </div>
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-category" class="col-md-4 col-form-label">
+          消費類別
+        </label>
+        <div class="col-md-8">
+          <select name="category" id="record-category" class="custom-select" required>
+            <option value="">請選擇⋯⋯</option>
+            {{#each categories}}
+            <option value="{{this.title}}">{{this.title}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-amount" class="col-md-4 col-form-label">
+          消費金額
+        </label>
+        <div class="col-md-8">
+          <input type="number" name="amount" class="form-control is-invalid" id="record-amount" placeholder="100"
+            min="1" required>
+        </div>
+      </div>
+      <hr>
+
+      <div class="ml-auto">
+        <button type="submit" class="btn btn-warning">新增消費明細</button>
+        <a href="/">
+          <button type="button" class="btn btn-warning m-3">回首頁</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</form>

@@ -3,6 +3,7 @@ const router = express.Router()
 const Category = require('../../models/category')
 const Record = require('../../models/record ')
 
+// 新增資料
 router.get('/new', (req, res) => {
   Category.find()
     .lean()
@@ -21,6 +22,7 @@ router.post('/', async (req, res) => {
   }
 })
 
+// 刪除資料
 router.delete('/:id', async (req, res) => {
   const id = req.params.id
   return Record.findById(id)

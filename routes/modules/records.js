@@ -31,4 +31,17 @@ router.delete('/:id', async (req, res) => {
     .catch(error => console.log(error))
 })
 
+// 篩選
+router.get('/', (req, res) => {
+  const sort = req.query.sort
+  let totalAmount = 0
+  Record.find({ category: `${sort}` })
+    .lean()
+    .then(records => {
+      if (sort.length === 0) { return res.redirect('/') }
+      records.forEach(record => { totalAmount += record.amount })
+      res.render('index', { records, totalAmount, sort })
+    })
+})
+
 module.exports = router

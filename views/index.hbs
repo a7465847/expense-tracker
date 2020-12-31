@@ -1,6 +1,24 @@
 <div class="row mt-5">
   <div class="col-md-4 m-auto">
     <div class="card card-body rounded-lg shadow  bd-highlight">
+      {{!-- 篩選 --}}
+      <form action="/records" method="GET" style="font-size:1.5em">
+        <div class="row">
+          <div class="col-md-5 ml-5 pt-2">
+            <select class="form-control" name="sort" onchange="this.form.submit()">
+              <option value="">篩選</option>
+              <option value="家居物業"{{#is sort '家居物業'}} selected  {{/is}}>家居務業</option>
+              <option value="交通出行"{{#is sort '交通出行'}} selected  {{/is}}>交通出行</option>
+              <option value="休閒娛樂" {{#is sort '休閒娛樂'}} selected  {{/is}}>休閒娛樂</option>
+              <option value="餐飲食品" {{#is sort '餐飲食品'}} selected  {{/is}}>餐飲食品</option>
+              <option value="其他"{{#is sort '其他'}} selected  {{/is}}>其他</option>
+            </select>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </form>
+      <hr>
+
       {{!-- 總金額 --}}
       <ul class="list-group list-group-flush " id="record-list">
         <li class="list-group-item list-group-item-action row d-flex bg-info align-self-center">
@@ -16,7 +34,7 @@
         <li class="list-group-item list-group-item-action d-flex p-1">
           {{!-- 類別紀錄 --}}
           <a class="col-md-8 d-flex justify-content-between align-items-center text-secondary btn" data-toggle="modal"
-            data-target="#dayaliModal-{{this._id}}" >
+            data-target="#dayaliModal-{{this._id}}">
             <div class="desc d-flex justify-content-between">
               <h2 class="category mr-3 text-secondary"> {{{ this.icon }}} </h2>
               <div class="detail">
@@ -84,3 +102,4 @@
   </div>
 </div>
 {{/each}}
+

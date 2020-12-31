@@ -15,6 +15,7 @@ router.post('/', async (req, res) => {
   const list = await Category.find({ title: `${record.category}` })
   try {
     record.icon = list[0].icon
+    if (!record.image) { record.image = 'https://i.imgur.com/rKa0IFa.jpg' }
     Record.create(record)
     return res.redirect('/')
   } catch (err) {

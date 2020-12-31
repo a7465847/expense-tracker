@@ -1,52 +1,49 @@
-<form action="/records" method="POST" class="was-validated mt-5">
+<form action="/records" method="POST" class="was-validated m-5" novalidate>
   <div class="row">
     <div class="card card-body rounded-lg shadow  bd-highlight col-md-4 m-auto">
       <h5><i class="fas fa-plus-square mr-1"></i>新增支出 </h5>
       <hr>
 
       <div class="row form-group col-md-12">
-        <label for="record-date" class="col-md-4 col-form-label">
-          消費日期
-        </label>
-        <div class="col-md-8">
-          <input type="date" name="date" class="form-control is-valid" id="record-date" placeholder="年/月/日" required>
-        </div>
+        <label for="record-date" class="col-md-4 col-form-label">消費日期</label>
+        <input type="date" class="form-control col-md-8" name="date" id="record-date" placeholder="年/月/日" required>
       </div>
       <hr>
 
       <div class="row form-group col-md-12">
-        <label for="record-name" class="col-md-4 col-form-label">
-          消費名稱
-        </label>
-        <div class="col-md-8">
-          <input type="text" name="name" class="form-control is-valid" id="record-name" required>
-        </div>
+        <label for="record-name" class="col-md-4 col-form-label">消費名稱</label>
+        <input type="text" class="form-control col-md-8" name="name" id="record-name" required>
       </div>
       <hr>
 
       <div class="row form-group col-md-12">
-        <label for="record-category" class="col-md-4 col-form-label" required>
-          消費類別
-        </label>
-        <div class="col-md-8">
-          <select name="category" id="record-category" class="custom-select">
-            <option>請選擇消費類型</option>
-            {{#each categories}}
-            <option value="{{this.title}}">{{this.title}}</option>
-            {{/each}}
-          </select>
-        </div>
+        <label for="record-category" class="col-md-4 col-form-label">消費類別</label>
+        <select name="category" id="record-category" class="col-md-8">
+          <option>請選擇消費類型</option>
+          {{#each categories}}
+          <option value="{{this.title}}">{{this.title}}</option>
+          {{/each}}
+        </select>
       </div>
       <hr>
 
       <div class="row form-group col-md-12">
-        <label for="record-amount" class="col-md-4 col-form-label">
-          消費金額
-        </label>
-        <div class="col-md-8">
-          <input type="number" name="amount" class="form-control is-invalid" id="record-amount" placeholder="100"
-            min="1" required>
-        </div>
+        <label for="record-amount" class="col-md-4 col-form-label">消費金額</label>
+        <input type="number" class="form-control col-md-8" name="amount" id="record-amount" min="1" required>
+      </div>
+      <hr>
+
+
+      <div class="row form-group col-md-12">
+        <label for="record-image" class="col-md-4 col-form-label">消費照片留存</label>
+        <input type="text" class="form-control col-md-8" name="image" id="record-image"
+          placeholder="輸入餐廳照片(限定.jpg or .png)">
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-description" class="col-md-4 col-form-label">記帳日記</label>
+        <input type="text" class="form-control col-md-8" name="description" id="record-amount" min="1" placeholder="輸入故事或購買理由" required>
       </div>
       <hr>
 

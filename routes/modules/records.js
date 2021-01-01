@@ -12,7 +12,7 @@ router.get('/new', (req, res) => {
 
 router.post('/', async (req, res) => {
   const record = req.body
-  const list = await Category.find({ title: `${record.category}` })
+  const list = await Category.find()
   try {
     record.icon = list[0].icon
     if (!record.image) { record.image = 'https://i.imgur.com/rKa0IFa.jpg' }
@@ -43,6 +43,29 @@ router.get('/', (req, res) => {
       records.forEach(record => { totalAmount += record.amount })
       res.render('index', { records, totalAmount, sort })
     })
+})
+
+// 編輯資料
+router.get('/:id/edit', async (req, res) => {
+  const id = req.params.id
+  const categories = await Category.find().lean().then(category => category).catch(error => console.error(error))
+  return Record.findById(id)
+    .lean()
+    .then(record => {
+      res.render('edit', { record, categories })
+    })
+})
+
+router.put('/:id', (req, res) => {
+  const id = req.params.id
+  const options = req.body
+  return Record.findById(id)
+    .then(record => {
+      record = Object.assign(record, options)
+      return record.save()
+    })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 module.exports = router

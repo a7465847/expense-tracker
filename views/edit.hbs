@@ -1,0 +1,59 @@
+<form action="/records/{{record._id}}?_method=PUT" method="POST" class="was-validated m-5" novalidate>
+  <div class="row">
+    <div class="card card-body rounded-lg shadow  bd-highlight col-md-4 m-auto">
+      <h5>編輯記帳資訊 </h5>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-date" class="col-md-4 col-form-label">消費日期</label>
+        <input type="date" class="form-control col-md-8" name="date" id="record-date" placeholder="年/月/日" value="{{ record.date }}" required>
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-name" class="col-md-4 col-form-label">消費名稱</label>
+        <input type="text" class="form-control col-md-8" name="name" id="record-name" value="{{ record.name }}" required>
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-category" class="col-md-4 col-form-label">消費類別</label>
+        <select name="category" id="record-category" class="col-md-8">
+          <option value="{{record.category}}">{{record.category}}</option>
+          {{#each categories}}
+          <option value="{{this.title}}">{{this.title}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-amount" class="col-md-4 col-form-label">消費金額</label>
+        <input type="number" class="form-control col-md-8" name="amount" id="record-amount" min="1" value="{{ record.amount }}" required>
+      </div>
+      <hr>
+
+
+      <div class="row form-group col-md-12">
+        <label for="record-image" class="col-md-4 col-form-label">消費照片留存</label>
+        <input type="text" class="form-control col-md-8" name="image" id="record-image" value="{{ record.image }}"
+          placeholder="輸入餐廳照片(限定.jpg or .png)">
+      </div>
+      <hr>
+
+      <div class="row form-group col-md-12">
+        <label for="record-description" class="col-md-4 col-form-label">記帳日記</label>
+        <input type="text" class="form-control col-md-8" name="description" id="record-description" min="1" placeholder="輸入故事或購買理由"  value="{{ record.description }}" required>
+      </div>
+      <hr>
+
+      <div class="ml-auto">
+        <button type="submit" class="btn btn-warning">編輯完成</button>
+        <a href="/">
+          <button type="button" class="btn btn-warning m-3">回首頁</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</form>

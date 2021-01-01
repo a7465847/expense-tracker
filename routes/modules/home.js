@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
       records.forEach(record => { totalAmount += record.amount })
       res.render('index', { records, totalAmount })
     })
+    .catch(error => console.error(error))
 })
 
 module.exports = router

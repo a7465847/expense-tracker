@@ -8,6 +8,7 @@ router.get('/new', (req, res) => {
   Category.find()
     .lean()
     .then(categories => res.render('new', { categories }))
+    .catch(error => console.error(error))
 })
 
 router.post('/', async (req, res) => {
@@ -43,6 +44,7 @@ router.get('/', (req, res) => {
       records.forEach(record => { totalAmount += record.amount })
       res.render('index', { records, totalAmount, sort })
     })
+    .catch(error => console.error(error))
 })
 
 // 編輯資料
@@ -54,6 +56,7 @@ router.get('/:id/edit', async (req, res) => {
     .then(record => {
       res.render('edit', { record, categories })
     })
+    .catch(error => console.error(error))
 })
 
 router.put('/:id', (req, res) => {

@@ -29,6 +29,6 @@ db.once('open', () => {
     ))
   Promise.all(promises).then(() => {
     console.log('Category seed done!')
-    process.exit()
+    db.close()
   })
 })

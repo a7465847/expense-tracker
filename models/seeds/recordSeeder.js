@@ -37,6 +37,6 @@ db.once('open', () => {
   )
   Promise.all(record).then(() => {
     console.log('Record seed done!')
-    process.exit()
+    db.close()
   })
 })

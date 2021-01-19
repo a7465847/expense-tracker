@@ -1,6 +1,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/user')
+const bcrypt = require('bcryptjs')
 
 module.exports = app => {
   // 初始化 Passport 模組
@@ -13,10 +14,12 @@ module.exports = app => {
         if (!user) {
           return done(null, false, req.flash('errors_msg', '帳號不存在 , 請前往註冊'))
         }
-        if (user.password !== password) {
-          return done(null, false, req.flash('errors_msg', '輸入密碼不正確 , 請再次確認後輸入'))
-        }
-        return done(null, user)
+        return bcrypt.compare(password, user.password).then(isMach => {
+          if (!isMach) {
+            return done(null, false, req.flash('errors_msg', '輸入密碼不正確 , 請再次確認後輸入'))
+          }
+          return done(null, user)
+        })
       })
       .catch(err => done(err, false))
   }))

@@ -3,21 +3,25 @@ const router = express.Router()
 const Category = require('../../models/category')
 const Record = require('../../models/record ')
 
-// 新增資料
-router.get('/new', (req, res) => {
-  Category.find()
-    .lean()
-    .then(categories => res.render('new', { categories }))
-    .catch(error => console.error(error))
+// 新增資料page
+router.get('/new', async (req, res) => {
+  try {
+    const categories = await Category.find().lean().exec()
+    return res.render('new', { categories })
+  } catch (err) {
+    console.log(err)
+  }
 })
 
+// 送出資料
 router.post('/', async (req, res) => {
-  const record = req.body
-  const list = await Category.find()
   try {
+    const record = req.body
+    const userId = req.user._id
+    const list = await Category.find().lean().exec()
     record.icon = list[0].icon
     if (!record.image) { record.image = 'https://i.imgur.com/rKa0IFa.jpg' }
-    Record.create(record)
+    Record.create({ ...record, userId })
     return res.redirect('/')
   } catch (err) {
     console.log(err)
@@ -26,49 +30,61 @@ router.post('/', async (req, res) => {
 
 // 刪除資料
 router.delete('/:id', async (req, res) => {
-  const id = req.params.id
-  return Record.findById(id)
-    .then(record => record.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
+  try {
+    const _id = req.params.id
+    const userId = req.user._id
+    const record = await Record.findOne({ _id, userId }).exec()
+    record.remove()
+    return res.redirect('/')
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 // 篩選
-router.get('/', (req, res) => {
-  const sort = req.query.sort
-  let totalAmount = 0
-  Record.find({ category: `${sort}` })
-    .lean()
-    .then(records => {
-      if (sort.length === 0) { return res.redirect('/') }
-      records.forEach(record => { totalAmount += record.amount })
-      res.render('index', { records, totalAmount, sort })
-    })
-    .catch(error => console.error(error))
+router.get('/', async (req, res) => {
+  try {
+    let totalAmount = 0
+    const sort = req.query.sort
+    const userId = req.user._id
+    const records = await Record.findOne({ category: `${sort}`, userId }).lean().then(records => [records])
+    if (!records) {
+      return res.redirect('/')
+    }
+    records.forEach(record => { totalAmount += record.amount })
+    return res.render('index', { records, totalAmount, sort })
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 // 編輯資料
 router.get('/:id/edit', async (req, res) => {
-  const id = req.params.id
-  const categories = await Category.find().lean().then(category => category).catch(error => console.error(error))
-  return Record.findById(id)
-    .lean()
-    .then(record => {
-      res.render('edit', { record, categories })
-    })
-    .catch(error => console.error(error))
+  try {
+    const _id = req.params.id
+    const userId = req.user._id
+    const categories = await Category.find().lean().exec()
+    const record = await Record.findOne({ _id, userId }).lean().exec()
+    return res.render('edit', { record, categories })
+  } catch (err) {
+    console.log(err)
+  }
 })
 
-router.put('/:id', (req, res) => {
-  const id = req.params.id
-  const options = req.body
-  return Record.findById(id)
-    .then(record => {
-      record = Object.assign(record, options)
-      return record.save()
-    })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
+router.put('/:id', async (req, res) => {
+  try {
+    const options = req.body
+    const _id = req.params.id
+    const userId = req.user._id
+    await Record.findOne({ _id, userId })
+      .then(record => {
+        record = Object.assign(record, options)
+        return record.save()
+      })
+    return res.redirect('/')
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 module.exports = router

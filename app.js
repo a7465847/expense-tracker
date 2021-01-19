@@ -4,6 +4,11 @@ const usePassport = require('./config/passport')
 const exphbs = require('express-handlebars')
 const bodyparser = require('body-parser')
 const methodOverride = require('method-override')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const helpers = require('handlebars-helpers')
 const comparison = helpers.comparison()
 const routes = require('./routes')
@@ -11,13 +16,13 @@ const flash = require('connect-flash')
 require('./config/mongoose')
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT
 
 app.engine('hbs', exphbs({ helpers: comparison, defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.use(session({
-  secret: 'ThisMyExpenseTracker',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))

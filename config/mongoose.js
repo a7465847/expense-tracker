@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const DB_URI = process.env.DB_URI || 'mongodb://localhost/expense-tracker'
+const DB_URI = process.env.DB_URI
 
 mongoose.connect(DB_URI, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection

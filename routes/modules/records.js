@@ -45,14 +45,40 @@ router.delete('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     let totalAmount = 0
-    const sort = req.query.sort
     const userId = req.user._id
-    const records = await Record.findOne({ category: `${sort}`, userId }).lean().then(records => [records])
-    if (!records) {
-      return res.redirect('/')
+    const { months, sort } = req.query
+    const query = {
+      dateOrCategory: {
+        $or: [
+          { date: { $regex: `[0-9]{4}-${months}-[0-9]{2}` }, userId },
+          { category: sort, userId }
+        ]
+      },
+      all: {
+        $and: [
+          { date: { $regex: `[0-9]{4}-${months}-[0-9]{2}` }, userId },
+          { category: sort, userId }
+        ]
+      }
     }
-    records.forEach(record => { totalAmount += record.amount })
-    return res.render('index', { records, totalAmount, sort })
+
+    if (query.dateOrCategory) {
+      const records = await Record.find(query.dateOrCategory).lean()
+      if (records.length === 0) return res.redirect('/')
+      console.log(records)
+      records.forEach(record => {
+        totalAmount += record.amount
+        return res.render('index', { records, totalAmount, sort, months })
+      })
+    } else {
+      const records = await Record.find(query.all).lean()
+      if (records.length === 0) return res.redirect('/')
+      console.log(records)
+      records.forEach(record => {
+        totalAmount += record.amount
+        return res.render('index', { records, totalAmount, sort, months })
+      })
+    }
   } catch (err) {
     console.log(err)
   }

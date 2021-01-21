@@ -18,6 +18,10 @@ const recordSchema = new Schema({
     type: Number,
     require: true
   },
+  merchant: {
+    type: String,
+    required: true
+  },
   image: {
     type: String
   },

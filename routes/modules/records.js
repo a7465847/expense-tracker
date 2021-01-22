@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Category = require('../../models/category')
 const Record = require('../../models/record ')
+let filterCategory = ''
+let filterMonths = ''
 
 // 新增資料page
 router.get('/new', async (req, res) => {
@@ -47,37 +49,55 @@ router.get('/', async (req, res) => {
     let totalAmount = 0
     const userId = req.user._id
     const { months, sort } = req.query
-    const query = {
-      dateOrCategory: {
-        $or: [
-          { date: { $regex: `[0-9]{4}-${months}-[0-9]{2}` }, userId },
-          { category: sort, userId }
-        ]
-      },
-      all: {
-        $and: [
-          { date: { $regex: `[0-9]{4}-${months}-[0-9]{2}` }, userId },
-          { category: sort, userId }
-        ]
-      }
-    }
+    const monthSearch = `[0-9]{4}-${months}-[0-9]{2}`
 
-    if (query.dateOrCategory) {
-      const records = await Record.find(query.dateOrCategory).lean()
-      if (records.length === 0) return res.redirect('/')
-      console.log(records)
-      records.forEach(record => {
-        totalAmount += record.amount
-        return res.render('index', { records, totalAmount, sort, months })
-      })
+    if (sort === '類別全部') {
+      return res.redirect('/')
+    } else if (months === '月份篩選') {
+      return res.redirect('/')
+    }
+    const query = {
+      $or: [
+        { date: { $regex: monthSearch, $options: 'i' }, userId },
+        { category: sort, userId }
+      ]
+    }
+    const myRecords = await Record.find(query).lean()
+    const type = sort ? 'category' : 'months'
+    if (type === 'category') {
+      filterCategory = sort
     } else {
-      const records = await Record.find(query.all).lean()
-      if (records.length === 0) return res.redirect('/')
-      console.log(records)
-      records.forEach(record => {
-        totalAmount += record.amount
-        return res.render('index', { records, totalAmount, sort, months })
+      filterMonths = months
+    }
+    console.log('filterCategory', filterCategory, 'filterMonths', filterMonths)
+    if (filterCategory && filterMonths && type === 'category') {
+      const records = myRecords.filter(user => {
+        if (user.date.substring(5, 7) === filterMonths) {
+          totalAmount += user.amount
+        }
+        return user.date.substring(5, 7) === filterMonths
       })
+      const months = filterMonths
+      return res.render('index', { records, totalAmount, sort, months })
+    } else if (filterCategory && filterMonths && type === 'months') {
+      const records = myRecords.filter(user => {
+        if (user.category === filterCategory) {
+          totalAmount += user.amount
+        }
+        return user.category === filterCategory
+      })
+      const sort = filterCategory
+      return res.render('index', { records, totalAmount, months, sort })
+    } else {
+      myRecords.forEach(sort => {
+        totalAmount += sort.amount
+      })
+      const records = myRecords
+      if (type === 'category') {
+        return res.render('index', { records, totalAmount, sort })
+      } else {
+        return res.render('index', { records, totalAmount, months })
+      }
     }
   } catch (err) {
     console.log(err)

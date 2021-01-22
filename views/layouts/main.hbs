@@ -19,6 +19,7 @@
       {{#if isAuthenticated}}{{ user.name}}'s {{/if}}
         簡易記帳本
       </a>
+      {{#if isAuthenticated}}
       <div class="d-flex justify-content-between">
         <form action="/search" class="mr-3">
           <div class="input-group">
@@ -31,7 +32,7 @@
         </form>
         <a class="btn btn-outline-light bg-info mr-3" href="/records/new">開始記一筆吧</a>
         
-        {{#if isAuthenticated}}
+        
         <a class="btn btn-outline-light bg-info " href="/users/logout">登出</a>
         {{else}}
         <a class="btn btn-outline-light bg-info " href="/users/login">登入</a>

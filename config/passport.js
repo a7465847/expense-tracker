@@ -54,7 +54,7 @@ module.exports = app => {
 
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_ID,
-    clientSecret: process.env.GOOGLE_SECRE,
+    clientSecret: process.env.GOOGLE_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK
   }, async (accessToken, refreshToken, profile, done) => {
     try {

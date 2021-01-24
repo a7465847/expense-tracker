@@ -1,42 +1,33 @@
 <div class="row mt-5">
   <div class="col-md-4 m-auto">
     <div class="card card-body rounded-lg shadow  bd-highlight">
-      <div class="m-auto  d-flex justify-content-between">
-        <form action="/records" method="GET" style="font-size:1.5em">
-          <div class="row">
-            <div class="ml-5 pt-2">
-              <select class="form-control" name="months" onchange="this.form.submit()">
-                <option value="月份篩選">月份篩選</option>
-                <option value="01" {{#is months '01' }} selected {{/is}}>1月</option>
-                <option value="02" {{#is months '02' }} selected {{/is}}>2月</option>
-                <option value="03" {{#is months '03' }} selected {{/is}}>3月</option>
-                <option value="04" {{#is months '04' }} selected {{/is}}>4月</option>
-                <option value="05" {{#is months '05' }} selected {{/is}}>5月</option>
-                <option value="05" {{#is months '06' }} selected {{/is}}>6月</option>
-                <option value="07" {{#is months '07' }} selected {{/is}}>7月</option>
-                <option value="08" {{#is months '08' }} selected {{/is}}>8月</option>
-                <option value="09" {{#is months '09' }} selected {{/is}}>9月</option>
-                <option value="10" {{#is months '10' }} selected {{/is}}>10月</option>
-                <option value="11" {{#is months '11' }} selected {{/is}}>11月</option>
-                <option value="12" {{#is months '12' }} selected {{/is}}>12月</option>
-              </select>
-            </div>
+      <div class="m-auto ">
+        <form action="/records" method="GET" style="font-size:1.5em;width:350px">
+          <div class="row d-flex justify-content-between">
+            <select class="form-control" style="width:40%" name="months" onchange="this.form.submit()">
+              <option value="月份篩選">月份篩選</option>
+              <option value="01" {{#is months '01' }} selected {{/is}}>1月</option>
+              <option value="02" {{#is months '02' }} selected {{/is}}>2月</option>
+              <option value="03" {{#is months '03' }} selected {{/is}}>3月</option>
+              <option value="04" {{#is months '04' }} selected {{/is}}>4月</option>
+              <option value="05" {{#is months '05' }} selected {{/is}}>5月</option>
+              <option value="05" {{#is months '06' }} selected {{/is}}>6月</option>
+              <option value="07" {{#is months '07' }} selected {{/is}}>7月</option>
+              <option value="08" {{#is months '08' }} selected {{/is}}>8月</option>
+              <option value="09" {{#is months '09' }} selected {{/is}}>9月</option>
+              <option value="10" {{#is months '10' }} selected {{/is}}>10月</option>
+              <option value="11" {{#is months '11' }} selected {{/is}}>11月</option>
+              <option value="12" {{#is months '12' }} selected {{/is}}>12月</option>
+            </select>
+            <select class="form-control" style="width:40%" name="sort" onchange="this.form.submit()">
+              <option value="類別全部">類別全部</option>
+              <option value="家居物業" {{#is sort '家居物業' }} selected {{/is}}>家居務業</option>
+              <option value="交通出行" {{#is sort '交通出行' }} selected {{/is}}>交通出行</option>
+              <option value="休閒娛樂" {{#is sort '休閒娛樂' }} selected {{/is}}>休閒娛樂</option>
+              <option value="餐飲食品" {{#is sort '餐飲食品' }} selected {{/is}}>餐飲食品</option>
+              <option value="其他" {{#is sort '其他' }} selected {{/is}}>其他</option>
+            </select>
           </div>
-        </form>
-        <form action="/records" method="GET" style="font-size:1.5em">
-          <div class="row">
-            <div class="ml-5 pt-2">
-              <select class="form-control" name="sort" onchange="this.form.submit()">
-                <option value="類別全部">類別全部</option>
-                <option value="家居物業" {{#is sort '家居物業' }} selected {{/is}}>家居務業</option>
-                <option value="交通出行" {{#is sort '交通出行' }} selected {{/is}}>交通出行</option>
-                <option value="休閒娛樂" {{#is sort '休閒娛樂' }} selected {{/is}}>休閒娛樂</option>
-                <option value="餐飲食品" {{#is sort '餐飲食品' }} selected {{/is}}>餐飲食品</option>
-                <option value="其他" {{#is sort '其他' }} selected {{/is}}>其他</option>
-              </select>
-            </div>
-          </div>
-        </form>
       </div>
 
       <hr>

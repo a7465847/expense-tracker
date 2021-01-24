@@ -2,8 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Category = require('../../models/category')
 const Record = require('../../models/record ')
-let filterCategory = ''
-let filterMonths = ''
+const filter = require('../modules/filter')
 
 // 新增資料page
 router.get('/new', async (req, res) => {
@@ -43,64 +42,78 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
-// 篩選
 router.get('/', async (req, res) => {
-  try {
-    let totalAmount = 0
-    const userId = req.user._id
-    const { months, sort } = req.query
-    const monthSearch = `[0-9]{4}-${months}-[0-9]{2}`
+  const userId = req.user._id
+  const { months, sort } = req.query
+  let totalAmount = 0
 
-    if (sort === '類別全部') {
-      return res.redirect('/')
-    } else if (months === '月份篩選') {
-      return res.redirect('/')
+  let query
+
+  if (months === '月份篩選' && sort === '類別全部') {
+    query = {
+      userId
     }
-    const query = {
-      $or: [
-        { date: { $regex: monthSearch, $options: 'i' }, userId },
-        { category: sort, userId }
-      ]
-    }
-    const myRecords = await Record.find(query).lean()
-    const type = sort ? 'category' : 'months'
-    if (type === 'category') {
-      filterCategory = sort
-    } else {
-      filterMonths = months
-    }
-    console.log('filterCategory', filterCategory, 'filterMonths', filterMonths)
-    if (filterCategory && filterMonths && type === 'category') {
-      const records = myRecords.filter(user => {
-        if (user.date.substring(5, 7) === filterMonths) {
-          totalAmount += user.amount
-        }
-        return user.date.substring(5, 7) === filterMonths
-      })
-      const months = filterMonths
-      return res.render('index', { records, totalAmount, sort, months })
-    } else if (filterCategory && filterMonths && type === 'months') {
-      const records = myRecords.filter(user => {
-        if (user.category === filterCategory) {
-          totalAmount += user.amount
-        }
-        return user.category === filterCategory
-      })
-      const sort = filterCategory
-      return res.render('index', { records, totalAmount, months, sort })
-    } else {
-      myRecords.forEach(sort => {
-        totalAmount += sort.amount
-      })
-      const records = myRecords
-      if (type === 'category') {
-        return res.render('index', { records, totalAmount, sort })
-      } else {
-        return res.render('index', { records, totalAmount, months })
+    pluralFilter(query)
+    return
+  }
+
+  if (months !== '月份篩選' && sort !== '類別全部') {
+    query = {
+      userId,
+      category: sort,
+      $expr: {
+        $eq: [{ $month: '$date' }, Number(months)]
       }
     }
-  } catch (err) {
-    console.log(err)
+    pluralFilter(query)
+    return
+  }
+
+  if (sort !== '類別全部') {
+    query = [
+      { $match: { userId } },
+      { $match: { category: sort } }
+    ]
+    sortFilter(query)
+    return
+  }
+
+  if (months !== '月份篩選') {
+    query = {
+      userId,
+      $expr: {
+        $eq: [{ $month: '$date' }, Number(months)]
+      }
+    }
+    monthsFilter(query)
+  }
+
+  複數篩選
+  async function pluralFilter (data) {
+    const records = await Record.find(data).lean()
+    records.forEach(user => {
+      user.date = user.date.toLocaleDateString()
+      totalAmount += user.amount
+    })
+    return res.render('index', { records, totalAmount, months, sort })
+  }
+  // 單一sort
+  async function sortFilter (data) {
+    const records = await Record.aggregate(data)
+    records.forEach(user => {
+      user.date = user.date.toLocaleDateString()
+      totalAmount += user.amount
+    })
+    return res.render('index', { records, totalAmount, sort })
+  }
+  // 單一months
+  async function monthsFilter (data) {
+    const records = await Record.find(data).lean()
+    records.forEach(user => {
+      user.date = user.date.toLocaleDateString()
+      totalAmount += user.amount
+    })
+    return res.render('index', { records, totalAmount, months })
   }
 })
 

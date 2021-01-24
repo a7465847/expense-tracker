@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const Category = require('../../models/category')
 const Record = require('../../models/record ')
-const filter = require('../modules/filter')
 
 // 新增資料page
 router.get('/new', async (req, res) => {

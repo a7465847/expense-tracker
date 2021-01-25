@@ -87,11 +87,11 @@ router.get('/', async (req, res) => {
     monthsFilter(query)
   }
 
-  複數篩選
+  // 複數篩選
   async function pluralFilter (data) {
     const records = await Record.find(data).lean()
     records.forEach(user => {
-      user.date = user.date.toLocaleDateString()
+      user.date = new Date().toLocaleString()
       totalAmount += user.amount
     })
     return res.render('index', { records, totalAmount, months, sort })
@@ -100,7 +100,7 @@ router.get('/', async (req, res) => {
   async function sortFilter (data) {
     const records = await Record.aggregate(data)
     records.forEach(user => {
-      user.date = user.date.toLocaleDateString()
+      user.date = new Date().toLocaleString()
       totalAmount += user.amount
     })
     return res.render('index', { records, totalAmount, sort })
@@ -109,7 +109,7 @@ router.get('/', async (req, res) => {
   async function monthsFilter (data) {
     const records = await Record.find(data).lean()
     records.forEach(user => {
-      user.date = user.date.toLocaleDateString()
+      user.date = new Date().toLocaleString()
       totalAmount += user.amount
     })
     return res.render('index', { records, totalAmount, months })

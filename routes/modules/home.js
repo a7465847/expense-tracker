@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     let totalAmount = 0
     const records = await Record.find({ userId }).lean().then(records => records)
     records.forEach(record => {
-      record.date = new Date().toLocaleString()
+      record.date = JSON.stringify(record.date).substring(0, 10)
       totalAmount += record.amount
     })
     res.render('index', { records, totalAmount })

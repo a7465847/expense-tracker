@@ -17,6 +17,7 @@ router.get('/new', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const record = req.body
+    console.log(record)
     const userId = req.user._id
     const list = await Category.find().lean().exec()
     record.icon = list[0].icon
@@ -91,7 +92,7 @@ router.get('/', async (req, res) => {
   async function pluralFilter (data) {
     const records = await Record.find(data).lean()
     records.forEach(user => {
-      user.date = new Date().toLocaleString()
+      user.date = JSON.stringify(user.date).substring(0, 10)
       totalAmount += user.amount
     })
     return res.render('index', { records, totalAmount, months, sort })
@@ -100,7 +101,7 @@ router.get('/', async (req, res) => {
   async function sortFilter (data) {
     const records = await Record.aggregate(data)
     records.forEach(user => {
-      user.date = new Date().toLocaleString()
+      user.date = JSON.stringify(user.date).substring(0, 10)
       totalAmount += user.amount
     })
     return res.render('index', { records, totalAmount, sort })
@@ -109,7 +110,7 @@ router.get('/', async (req, res) => {
   async function monthsFilter (data) {
     const records = await Record.find(data).lean()
     records.forEach(user => {
-      user.date = new Date().toLocaleString()
+      user.date = JSON.stringify(user.date).substring(0, 10)
       totalAmount += user.amount
     })
     return res.render('index', { records, totalAmount, months })
